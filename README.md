@@ -29,10 +29,7 @@
 ### 1. 安装依赖工具
 
 ```bash
-# 安装 PlatformIO Core（如果尚未安装）
-pip install platformio
-
-# 或者在 VS Code 中安装 PlatformIO IDE 扩展
+# 在 VS Code 中安装 PlatformIO IDE 扩展
 ```
 
 ### 2. 安装 DFU 工具
@@ -50,7 +47,31 @@ scoop install dfu-util
 - 从 [dfu-util 官网](http://dfu-util.sourceforge.net/) 下载
 - 修改 `platformio.ini` 中的 `dfu-util.exe` 路径
 
-### 3. 克隆项目
+### 3. 安装 DFU 驱动（Windows 必需）
+
+**重要：Windows 系统必须使用 Zadig 安装 USB 驱动，否则无法识别 DFU 设备！**
+
+1. 下载 [Zadig](https://zadig.akeo.ie/)
+2. 将 STM32 进入 DFU 模式（按住 BOOT0 + 按 RESET）
+3. 运行 Zadig，在菜单中选择 `Options` -> `List All Devices`
+4. 在设备列表中选择 `STM32 BOOTLOADER` 或 `DFU in FS Mode`（设备 ID: 0483:DF11）
+5. 在驱动类型下拉框中选择 `WinUSB` 或 `libusbK`
+6. 点击 `Install Driver` 或 `Replace Driver` 按钮
+7. 等待安装完成
+
+**验证驱动安装：**
+
+```bash
+dfu-util -l
+```
+
+应该能看到类似输出：
+
+```text
+Found DFU: [0483:df11] ver=2200, devnum=X, cfg=1, intf=0, path="X-X", alt=0, name="@Internal Flash  /0x08000000/04*016Kg,01*064Kg,07*128Kg", serial="XXXXXXXXXXXX"
+```
+
+### 4. 克隆项目
 
 ```bash
 git clone <repository-url>
@@ -145,16 +166,8 @@ LED: ON  | ADC: 2045
 - 尝试多次按 BOOT0 + RESET 组合
 - 检查 USB 线缆质量（建议使用数据线而非充电线）
 
-### 问题 2: 上传失败 "Cannot open DFU device"
 
-**解决方案**：
-- Windows: 安装 [Zadig](https://zadig.akeo.ie/) 驱动
-  1. 运行 Zadig
-  2. 选择 "STM32 BOOTLOADER"
-  3. 安装 WinUSB 驱动
-- Linux: 添加 udev 规则或使用 `sudo`
-
-### 问题 3: 同样的固件无法烧录第二次
+### 问题 2: 同样的固件无法烧录第二次
 
 **原因**：`dfu-suffix` 会从文件中删除后缀，导致第二次上传失败。
 
@@ -162,28 +175,6 @@ LED: ON  | ADC: 2045
 - 每次上传前重新编译：`pio run`
 - 或者修改 `upload_command` 先复制文件
 
-### 问题 4: 没有串口输出
-
-**检查项**：
-1. 确认已正确上传固件
-2. 检查 USB 连接
-3. 确认串口波特率为 115200
-4. 尝试按一下 RESET 按钮
-5. 检查串口驱动是否安装
-
-## 🧰 辅助工具
-
-### monitor.py - 串口监视器
-
-自动查找并连接 STM32 设备：
-```bash
-python monitor.py
-```
-
-手动指定端口：
-```bash
-python monitor.py COM3
-```
 
 ## 📚 参考资料
 
