@@ -1,0 +1,65 @@
+# PlatformIO
+.pio/
+.pio
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+
+# VS Code
+.vscode/
+.vscode/.browse.c_cpp.db*
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/ipch
+.vscode/settings.json
+
+# Build files
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.d
+*.su
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# 特定脚本（如果不想提交）
+# com.py
+# monitor.py
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.log
+
+# IDE
+.idea/
+*.iml
+*.workspace
+*.project
+*.cproject
+*.settings/
+
+# Debug files
+*.dmp
+*.trace
+
+com.py
+README
