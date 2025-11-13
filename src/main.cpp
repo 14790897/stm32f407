@@ -3,6 +3,7 @@
 // 定义 LED 引脚，根据教程是 PB2
 // 在 STM32 Arduino 核心中，直接写 PB2 即可，系统会自动映射
 #define MY_LED PB2
+#define MY_KEY PA0
 
 void setup() {
     Serial.begin(115200);
