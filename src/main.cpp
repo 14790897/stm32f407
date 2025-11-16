@@ -1,27 +1,25 @@
 #include <Arduino.h>
-
-// 定义 LED 引脚，根据教程是 PB2
-// 在 STM32 Arduino 核心中，直接写 PB2 即可，系统会自动映射
-#define MY_LED PB2
-#define MY_KEY PA0
+#include "stm32f4xx_hal.h"
 
 void setup() {
-    Serial.begin(115200);
-    // 1. 初始化引脚模式
-    // 相当于配置 MODER, OTYPER, OSPEEDR 等寄存器
-    pinMode(MY_LED, OUTPUT);
+  Serial.begin(115200);        // 打开 USB CDC
+  delay(50);                   // 给枚举一点时间
+
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  GPIO_InitTypeDef i = {0};
+  i.Pin = GPIO_PIN_2;
+  i.Mode = GPIO_MODE_OUTPUT_PP;
+  i.Pull = GPIO_NOPULL;
+  i.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &i);
 }
 
 void loop() {
-    // 2. 点亮 LED (输出高电平)
-    // 相当于操作 ODR 或 BSRR 寄存器
-    digitalWrite(MY_LED, HIGH);
-    Serial.println("Hello PlatformIO! count: " + String(millis()));
-    delay(2000);
-    
-    // 3. 熄灭 LED (输出低电平)
-    digitalWrite(MY_LED, LOW);
-    
-    // 延时 500 毫秒
-    delay(500);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);   // 亮（PB2→LED→2k→GND）
+  Serial.println("LED=ON");
+  delay(500);
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET); // 灭
+  Serial.println("LED=OFF");
+  delay(500);
 }
